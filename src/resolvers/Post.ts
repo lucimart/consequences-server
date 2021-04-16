@@ -1,29 +1,41 @@
 // @ts-ignore
-const author = (parent, _, context) => {
-  return context.prisma.author
-    .findUnique({ where: { id: parent.authorId } })
-    .author();
+export const author = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).author();
 };
 
 // @ts-ignore
-const group = (parent, _, context) => {
-  return context.prisma.group
-    .findUnique({ where: { id: parent.groupId } })
-    .group();
+export const text = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).text();
 };
 
 // @ts-ignore
-const text = (parent, _, context) => {
-  return context.prisma.text
-    .findUnique({ where: { postId: parent.id } })
-    .text();
+export const image = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).image();
 };
 
 // @ts-ignore
-const image = async (parent, _, context) => {
-  return await context.prisma.image
-    .findUnique({ where: { postId: parent.id } })
-    .image();
+export const group = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).group();
 };
 
-export { author, group, text, image };
+// @ts-ignore
+export const votes = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).votes();
+};
+
+// @ts-ignore
+export const replies = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).replies();
+};
+
+// @ts-ignore
+export const parent = (parent, _, context) => {
+  return context.prisma.post.findUnique({ where: { id: parent.id } }).parent();
+};
+
+// @ts-ignore
+export const children = (parent, _, context) => {
+  return context.prisma.post
+    .findUnique({ where: { id: parent.id } })
+    .children();
+};

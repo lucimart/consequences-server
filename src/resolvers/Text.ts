@@ -1,6 +1,4 @@
 // @ts-ignore
-const post = (parent, _, context) => {
-  return context.prisma.group.findUnique({ where: { id: parent.id } }).post();
+export const post = (parent, _, context) => {
+  return context.prisma.text.findUnique({ where: { id: parent.id } }).post();
 };
-
-export { post };
