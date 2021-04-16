@@ -1,11 +1,29 @@
 // @ts-ignore
-const author = (parent, _, context) => {
-  return context.prisma.group.findUnique({ where: { id: parent.id } }).author();
+const author = async (parent, _, context) => {
+  return await context.prisma.author
+    .findUnique({ where: { id: parent.id } })
+    .author();
 };
 
 // @ts-ignore
-const group = (parent, _, context) => {
-  return context.prisma.group.findUnique({ where: { id: parent.id } }).group();
+const group = async (parent, _, context) => {
+  return await context.prisma.group
+    .findUnique({ where: { id: parent.id } })
+    .group();
 };
 
-export { author, group };
+// @ts-ignore
+const text = async (parent, _, context) => {
+  return await context.prisma.text
+    .findUnique({ where: { id: parent.id } })
+    .text();
+};
+
+// @ts-ignore
+const image = async (parent, _, context) => {
+  return await context.prisma.image
+    .findUnique({ where: { id: parent.id } })
+    .image();
+};
+
+export { author, group, text, image };
