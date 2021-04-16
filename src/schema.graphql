@@ -1,6 +1,6 @@
 type Query {
   info: String!
-  feed: [Text!]!
+  feed(groupId: ID): [Text!]!
   text(id: ID!): Text
 }
 
