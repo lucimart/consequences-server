@@ -1,20 +1,20 @@
 // @ts-ignore
-const author = async (parent, _, context) => {
-  return await context.prisma.author
+const author = (parent, _, context) => {
+  return context.prisma.author
     .findUnique({ where: { id: parent.authorId } })
     .author();
 };
 
 // @ts-ignore
-const group = async (parent, _, context) => {
-  return await context.prisma.group
+const group = (parent, _, context) => {
+  return context.prisma.group
     .findUnique({ where: { id: parent.groupId } })
     .group();
 };
 
 // @ts-ignore
-const text = async (parent, _, context) => {
-  return await context.prisma.text
+const text = (parent, _, context) => {
+  return context.prisma.text
     .findUnique({ where: { postId: parent.id } })
     .text();
 };
