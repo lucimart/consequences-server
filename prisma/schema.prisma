@@ -8,22 +8,25 @@ datasource db {
 
 generator client {
   provider = "prisma-client-js"
+  previewFeatures = ["orderByRelation"]
 }
 
 model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-  group     Group    @relation(fields: [groupId], references: [id])
-  groupId   Int
-  text      Text?
-  image     Image?
-  votes     Vote[]
-  replies   Reply[]
-  parent    Post?    @relation("ParentChildren", fields: [parentId], references: [id])
-  parentId  Int?
-  children  Post[]   @relation("ParentChildren")
+  id        	Int      @id @default(autoincrement())
+  createdAt 	DateTime @default(now())
+  author    	User     @relation(fields: [authorId], references: [id])
+  authorId  	Int
+  group     	Group    @relation(fields: [groupId], references: [id])
+  groupId   	Int
+  text      	Text?
+  image     	Image?
+  votes     	Vote[]
+  votesCount	Int @default(0)
+  replies   	Reply[]
+  parent    	Post?    @relation("ParentChildren", fields: [parentId], references: [id])
+  parentId  	Int?
+  children  	Post[]   @relation("ParentChildren")
+  isRoot		Boolean	@default(false)
 }
 
 model Image {
@@ -49,6 +52,7 @@ model Reply {
   post      Post     @relation(fields: [postId], references: [id])
   postId    Int
   votes     Vote[]
+  votesCount	Int @default(0)
   parent    Reply?   @relation("ChildrenParent", fields: [parentId], references: [id])
   parentId  Int?
   children  Reply[]  @relation("ChildrenParent")
@@ -73,6 +77,7 @@ model User {
   ownerOf  Group[]
   memberOf Member[]
   votes    Vote[]
+  votesCount	Int @default(0)
   replies  Reply[]
 }
 
