@@ -154,55 +154,55 @@ export const createVote = async (parent, { postId, replyId }, context) => {
   }
 };
 
-export const creatdeleeVote = async (
-  parent,
-  { postId, replyId, voteId },
-  context
-) => {
-  const { userId } = context;
-  if (
-    (postId != null && replyId != null) ||
-    (postId == null && replyId == null)
-  )
-    throw new UserInputError(
-      "Same vote cannot be related to a post and a reply"
-    );
+// export const deleteVote = async (
+//   parent,
+//   { postId, replyId, voteId },
+//   context
+// ) => {
+//   const { userId } = context;
+//   if (
+//     (postId != null && replyId != null) ||
+//     (postId == null && replyId == null)
+//   )
+//     throw new UserInputError(
+//       "Same vote cannot be related to a post and a reply"
+//     );
 
-  if (postId != null) {
-    const vote = await context.prisma.vote.create({
-      data: {
-        post: { connect: { id: parseInt(postId, 10) } },
-        user: { connect: { id: userId } },
-      },
-    });
+//   if (postId != null) {
+//     const vote = await context.prisma.vote.create({
+//       data: {
+//         post: { connect: { id: parseInt(postId, 10) } },
+//         user: { connect: { id: userId } },
+//       },
+//     });
 
-    await context.prisma.post.update({
-      where: {
-        id: parseInt(postId, 10),
-      },
-      data: {
-        votesCount: { increment: 1 },
-      },
-    });
+//     await context.prisma.post.update({
+//       where: {
+//         id: parseInt(postId, 10),
+//       },
+//       data: {
+//         votesCount: { increment: 1 },
+//       },
+//     });
 
-    return vote;
-  } else {
-    const vote = await context.prisma.vote.create({
-      data: {
-        reply: { connect: { id: parseInt(replyId, 10) } },
-        user: { connect: { id: userId } },
-      },
-    });
+//     return vote;
+//   } else {
+//     const vote = await context.prisma.vote.create({
+//       data: {
+//         reply: { connect: { id: parseInt(replyId, 10) } },
+//         user: { connect: { id: userId } },
+//       },
+//     });
 
-    await context.prisma.reply.update({
-      where: {
-        id: parseInt(replyId, 10),
-      },
-      data: {
-        votesCount: { increment: 1 },
-      },
-    });
+//     await context.prisma.reply.update({
+//       where: {
+//         id: parseInt(replyId, 10),
+//       },
+//       data: {
+//         votesCount: { increment: 1 },
+//       },
+//     });
 
-    return vote;
-  }
-};
+//     return vote;
+//   }
+// };
