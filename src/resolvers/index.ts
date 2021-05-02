@@ -9,8 +9,9 @@ import * as Profile from "./Profile";
 import * as Query from "./Query";
 import * as Reply from "./Reply";
 import * as Vote from "./Vote";
-
-export const resolvers = {
+// import { Resolvers } from "../generated/graphql";
+// TODO: implement resolver types
+const resolvers = {
   Query,
   Mutation,
   Group,
@@ -23,3 +24,5 @@ export const resolvers = {
   Reply,
   Vote,
 };
+
+export default resolvers;
