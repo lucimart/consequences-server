@@ -1,17 +1,16 @@
 type Query {
   info: String!
-  feed(parentId: Int, take: Int): [Post!]!
-  firstFeed(groupId: ID, take: Int): [Post!]!
+  feed(groupId: ID, parentId: Int, take: Int): [Post!]!
   text(id: ID!): Text
 }
 
 type Mutation {
-  createText(body: String!, groupId: ID, parent: Post): Text!
+  createText(body: String!, groupId: ID, parentId: ID): Text!
   deleteText(id: ID!): Text
   signup(email: String!, password: String!, name: String!): AuthPayload
   login(email: String!, password: String!): AuthPayload
   createGroup(name: String!): Group!
-  createVote(post: Post, reply: Reply): Vote!
+  createVote(postId: ID, replyId: ID): Vote!
 }
 
 type AuthPayload {
