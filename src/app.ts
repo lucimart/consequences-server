@@ -4,6 +4,7 @@ import { ApolloServer } from "apollo-server";
 import { PrismaClient } from "@prisma/client";
 import { resolvers } from "./resolvers/index";
 import { getUserId } from "./utils";
+require("dotenv").config();
 
 const prisma = new PrismaClient();
 

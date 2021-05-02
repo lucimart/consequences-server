@@ -1,14 +1,14 @@
 // @ts-ignore
 export const post = (parent, _, context) => {
-  return context.prisma.group.findUnique({ where: { id: parent.id } }).post();
+  return context.prisma.vote.findUnique({ where: { id: parent.id } }).post();
 };
 
 // @ts-ignore
 export const reply = (parent, _, context) => {
-  return context.prisma.group.findUnique({ where: { id: parent.id } }).reply();
+  return context.prisma.vote.findUnique({ where: { id: parent.id } }).reply();
 };
 
 // @ts-ignore
 export const user = (parent, _, context) => {
-  return context.prisma.group.findUnique({ where: { id: parent.id } }).user();
+  return context.prisma.vote.findUnique({ where: { id: parent.id } }).user();
 };

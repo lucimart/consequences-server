@@ -70,12 +70,12 @@ const createPost = async (_, args, context) => {
   const groupId = args.groupId ? args.groupId : 1;
   const { userId } = context;
 
-  if (args.parent != null)
+  if (args.parentId != null)
     return await context.prisma.post.create({
       data: {
         group: { connect: { id: groupId } },
         author: { connect: { id: userId } },
-        parent: { connect: { id: args.parent.id } },
+        parent: { connect: { id: args.parentId } },
       },
     });
   else {
@@ -105,24 +105,27 @@ export const createText = async (parent, args, context) => {
 };
 
 // @ts-ignore
-export const createVote = async (parent, { post, reply }, context) => {
+export const createVote = async (parent, { postId, replyId }, context) => {
   const { userId } = context;
-  if ((post != null && reply != null) || (post == null && reply == null))
+  if (
+    (postId != null && replyId != null) ||
+    (postId == null && replyId == null)
+  )
     throw new UserInputError(
       "Same vote cannot be related to a post and a reply"
     );
 
-  if (post != null) {
+  if (postId != null) {
     const vote = await context.prisma.vote.create({
       data: {
-        post: { connect: { id: post.id } },
+        post: { connect: { id: parseInt(postId, 10) } },
         user: { connect: { id: userId } },
       },
     });
 
     await context.prisma.post.update({
       where: {
-        id: vote.id,
+        id: parseInt(postId, 10),
       },
       data: {
         votesCount: { increment: 1 },
@@ -133,14 +136,67 @@ export const createVote = async (parent, { post, reply }, context) => {
   } else {
     const vote = await context.prisma.vote.create({
       data: {
-        reply: { connect: { id: reply.id } },
+        reply: { connect: { id: parseInt(replyId, 10) } },
         user: { connect: { id: userId } },
       },
     });
 
     await context.prisma.reply.update({
       where: {
-        id: vote.id,
+        id: parseInt(replyId, 10),
+      },
+      data: {
+        votesCount: { increment: 1 },
+      },
+    });
+
+    return vote;
+  }
+};
+
+export const creatdeleeVote = async (
+  parent,
+  { postId, replyId, voteId },
+  context
+) => {
+  const { userId } = context;
+  if (
+    (postId != null && replyId != null) ||
+    (postId == null && replyId == null)
+  )
+    throw new UserInputError(
+      "Same vote cannot be related to a post and a reply"
+    );
+
+  if (postId != null) {
+    const vote = await context.prisma.vote.create({
+      data: {
+        post: { connect: { id: parseInt(postId, 10) } },
+        user: { connect: { id: userId } },
+      },
+    });
+
+    await context.prisma.post.update({
+      where: {
+        id: parseInt(postId, 10),
+      },
+      data: {
+        votesCount: { increment: 1 },
+      },
+    });
+
+    return vote;
+  } else {
+    const vote = await context.prisma.vote.create({
+      data: {
+        reply: { connect: { id: parseInt(replyId, 10) } },
+        user: { connect: { id: userId } },
+      },
+    });
+
+    await context.prisma.reply.update({
+      where: {
+        id: parseInt(replyId, 10),
       },
       data: {
         votesCount: { increment: 1 },

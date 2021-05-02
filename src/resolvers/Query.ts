@@ -3,39 +3,16 @@ import { Post } from "@prisma/client";
 
 const prisma = new PrismaClient();
 
-// @ts-ignore
-// const postsByGroup = async (groupId, context) =>
-//   await context.prisma.group.findUnique({ where: { id: groupId } }).posts();
+const postsByGroup = async (groupId, context) =>
+  await context.prisma.group.findUnique({ where: { id: groupId } }).posts();
 
-// export const feed = async (_parent, args, context) => {
-//   const groupId = args.groupId ? args.groupId : 1;
-//     return postsByGroup(groupId, context);
-// };
-
-export const firstFeed = async (_parent, { ...args, take = 10 }, context) => {
-  const groupId: number = args.group ? args.group.id : 1;
-  let parent = await context.prisma.post.findUnique({
-    where: { id: 1, group: { id: groupId } },
-    include: { children: true },
-  });
-  let tree: any[] = [];
-  let children;
-  let i = -1;
-  while (++i < take) {
-    tree.push(parent);
-    children = tree[i]?.children.sort(
-      (child1: any, child2: any) => child2.votesCount - child1.votesCount
-    );
-    parent = await context.prisma.post.findUnique({
-      where: { id: children[0].id },
-      include: { children: true },
-    });
-  }
-  return tree;
-};
-
-export const feed = async (_parent, { parentId, take = 10 }, context) => {
-  let parent = await context.prisma.post.findUnique({
+export const feed = async (
+  _parent,
+  { groupId = 1, parentId, take = 10 },
+  context
+) => {
+  parentId = parentId ? parentId : (await postsByGroup(groupId, context)).id;
+  let parent = await prisma.post.findUnique({
     where: { id: parentId },
     include: { children: true },
   });
@@ -44,13 +21,17 @@ export const feed = async (_parent, { parentId, take = 10 }, context) => {
   let i = -1;
   while (++i < take) {
     tree.push(parent);
-    children = tree[i]?.children.sort(
-      (child1: any, child2: any) => child2.votesCount - child1.votesCount
-    );
-    parent = await context.prisma.post.findUnique({
-      where: { id: children[0].id },
-      include: { children: true },
-    });
+    if (tree[i]?.children.length > 0) {
+      children = tree[i]?.children
+        .sort(
+          (child1: any, child2: any) => child1.votesCount - child2.votesCount
+        )
+        .reverse();
+      parent = await prisma.post.findUnique({
+        where: { id: children[0].id },
+        include: { children: true },
+      });
+    } else break;
   }
   return tree;
 };
