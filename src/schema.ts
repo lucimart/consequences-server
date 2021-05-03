@@ -2,9 +2,8 @@ import { gql } from "apollo-server-express";
 
 const typeDefs = gql`
   type Query {
-    info: String!
     feed(groupId: ID, parentId: Int, take: Int): [Post!]!
-    text(id: ID!): Text
+    text(postId: ID!): Text
   }
 
   type Mutation {

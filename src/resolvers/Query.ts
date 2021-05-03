@@ -1,18 +1,18 @@
-import { PrismaClient } from ".prisma/client";
-import { Post } from "@prisma/client";
+import { PrismaClient } from "@prisma/client";
+import { Context } from "../context";
 
 const prisma = new PrismaClient();
 
-const postsByGroup = async (groupId, context) =>
+const postsByGroup = async (groupId, context: Context) =>
   await context.prisma.group.findUnique({ where: { id: groupId } }).posts();
 
 export const feed = async (
   _parent,
   { groupId = 1, parentId, take = 10 },
-  context
+  context: Context
 ) => {
-  parentId = parentId ? parentId : (await postsByGroup(groupId, context)).id;
-  let parent = await prisma.post.findUnique({
+  parentId = parentId ? parentId : (await postsByGroup(groupId, context))[0].id;
+  let parent = await context.prisma.post.findUnique({
     where: { id: parentId },
     include: { children: true },
   });
@@ -34,4 +34,11 @@ export const feed = async (
     } else break;
   }
   return tree;
+};
+
+export const text = async (_parent, { postId }, context: Context) => {
+  return await context.prisma.text.findUnique({
+    where: { postId: parseInt(postId) },
+    include: { post: true },
+  });
 };

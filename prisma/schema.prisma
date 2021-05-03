@@ -39,7 +39,7 @@ model Image {
 model Text {
   id     Int    @id @default(autoincrement())
   post   Post   @relation(fields: [postId], references: [id])
-  postId Int
+  postId Int	@unique
   body   String @db.VarChar(255)
 }
 

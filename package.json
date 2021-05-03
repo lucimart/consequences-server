@@ -12,6 +12,7 @@
     "generate": "graphql-code-generator --config codegen.yml"
   },
   "dependencies": {
+    "@apollo/client": "^3.3.16",
     "@prisma/client": "^2.21.2",
     "@types/node": "^15.0.1",
     "@types/prettier": "^2.2.3",
