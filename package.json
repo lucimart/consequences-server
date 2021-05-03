@@ -8,8 +8,8 @@
   "scripts": {
     "start": "node 'dist/server.js'",
     "build": "tsc -p .",
-    "dev": "npm run build:dev",
-    "build:dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
+	"prebuild": "yarn run generate",
+    "dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
     "generate": "graphql-code-generator --config codegen.yml"
   },
   "dependencies": {
