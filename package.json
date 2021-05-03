@@ -8,7 +8,6 @@
   "scripts": {
     "start": "node 'dist/server.js'",
     "build": "tsc -p .",
-	"prebuild": "yarn run generate",
     "dev": "nodemon 'src/server.ts' --exec 'ts-node' src/server.ts -e ts,graphql",
     "generate": "graphql-code-generator --config codegen.yml"
   },
